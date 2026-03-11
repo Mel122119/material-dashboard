@@ -12,9 +12,8 @@ import {
 
 export default function Sidebar() {
   return (
-    <aside className="w-64 bg-zinc-700 text-zinc-200 flex flex-col p-6">
-
-      <h2 className="text-xl font-semibold text-white mb-8">
+   <aside className="w-64 bg-[#EDEDEB] text-black min-h-screen flex flex-col border-r">
+      <h2 className="text-xl font-semibold text-black mb-8">
         Material Shadcn
       </h2>
 

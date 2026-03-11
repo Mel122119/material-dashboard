@@ -5,7 +5,7 @@ import {
 } from "recharts"
 
 import { Card, CardContent } from "@/components/ui/card"
-
+import { Typography } from "@/components/ui/typography"
 
 interface StatCardProps {
   title: string
@@ -25,19 +25,36 @@ const miniData = [
 
 export function StatCard({ title, value, description, icon }: StatCardProps) {
   return (
-    <Card className="shadow-sm border border-border">
-      <CardContent className="p-6 space-y-4">
+    <Card className="shadow-sm rounded-2xl border border-border">
+      <CardContent className="p-6 space-y-5">
+
+        {/* Header */}
         <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-muted-foreground">
+
+          <Typography
+            variant="p"
+            className="text-sm text-muted-foreground"
+          >
             {title}
-          </p>
-          {icon}
+          </Typography>
+
+          {icon && (
+            <div className="p-2 rounded-lg bg-muted flex items-center justify-center">
+              {icon}
+            </div>
+          )}
+
         </div>
 
-        <h2 className="text-2xl font-bold">
+        {/* Value */}
+        <Typography
+          variant="h2"
+          className="text-3xl font-bold"
+        >
           {value}
-        </h2>
+        </Typography>
 
+        {/* Mini Chart */}
         <div className="h-16">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={miniData}>
@@ -52,9 +69,14 @@ export function StatCard({ title, value, description, icon }: StatCardProps) {
           </ResponsiveContainer>
         </div>
 
-        <p className="text-sm text-muted-foreground">
+        {/* Description */}
+        <Typography
+          variant="p"
+          className="text-sm text-muted-foreground"
+        >
           {description}
-        </p>
+        </Typography>
+
       </CardContent>
     </Card>
   )
