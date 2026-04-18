@@ -1,43 +1,45 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useState, useEffect } from "react"
-import { useLocation } from "react-router-dom"
 
 export default function Navbar() {
   const [dark, setDark] = useState(false)
-  const location = useLocation()
 
   useEffect(() => {
-    if (dark) {
-      document.documentElement.classList.add("dark")
-    } else {
-      document.documentElement.classList.remove("dark")
-    }
-  }, [dark])
+    const isDark = localStorage.getItem("theme") === "dark"
+    setDark(isDark)
+    document.documentElement.classList.toggle("dark", isDark)
+  }, [])
 
-  // Get page name from URL
-  const pageName =
-    location.pathname === "/"
-      ? "Dashboard"
-      : location.pathname.replace("/", "").replace("-", " ")
+  const toggleDark = () => {
+    const newTheme = !dark
+    setDark(newTheme)
+    document.documentElement.classList.toggle("dark", newTheme)
+    localStorage.setItem("theme", newTheme ? "dark" : "light")
+  }
 
   return (
-    <div className="h-16 border-b flex items-center justify-between px-6 bg-background">
-      <h1 className="text-xl font-semibold capitalize">
-        {pageName}
-      </h1>
+    <div className="w-full flex items-center justify-between px-6 py-4 border-b bg-white dark:bg-gray-900">
 
-      <div className="flex items-center gap-4">
+      {/* LEFT */}
+      <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
+        Dashboard
+      </h2>
+
+      {/* RIGHT */}
+      <div className="flex items-center gap-4 ml-auto">
+
         <button
-          onClick={() => setDark(!dark)}
-          className="border px-3 py-1 rounded-md"
+          onClick={toggleDark}
+          className="px-3 py-1 text-sm rounded-md border hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-white"
         >
           {dark ? "Light" : "Dark"}
         </button>
 
-        <Avatar>
-          <AvatarFallback>RD</AvatarFallback>
-        </Avatar>
+        <div className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-white">
+          RD
+        </div>
+
       </div>
+
     </div>
   )
 }

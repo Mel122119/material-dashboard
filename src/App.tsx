@@ -27,7 +27,6 @@ function App() {
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/subscriptions" element={<Subscriptions />} />
           <Route path="/documentation" element={<Documentation />} />
-          <Route path="/tables" element={<Tables />} />
         </Route>
 
       </Routes>

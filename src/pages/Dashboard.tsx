@@ -1,3 +1,5 @@
+"use client"
+
 import { StatCard } from "@/components/Statcard"
 
 import {
@@ -8,16 +10,19 @@ import {
 } from "@/components/ui/card"
 
 import { Progress } from "@/components/ui/progress"
-import { Typography } from "@/components/ui/typography"
 
 import {
-  ResponsiveContainer,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
+
+import {
   LineChart,
   Line,
   BarChart,
   Bar,
   XAxis,
-  Tooltip,
   CartesianGrid,
 } from "recharts"
 
@@ -27,6 +32,8 @@ import {
   CheckCircle,
   ClipboardList,
 } from "lucide-react"
+
+import AreaChartCard from "@/components/charts/AreaChartCard"
 
 /* ---------------- Chart Data ---------------- */
 
@@ -48,34 +55,25 @@ const performanceData = [
 
 export default function Dashboard() {
   return (
-    <div className="min-h-screen bg-muted/40 flex">
+    <div className="min-h-screen bg-muted/40">
+      <main className="w-full max-w-7xl mx-auto p-6 space-y-8">
 
-      <main className="flex-1 p-6 space-y-8 max-w-7xl mx-auto w-full">
-
-        {/* PAGE HEADER */}
-
+        {/* HEADER */}
         <div className="flex items-center justify-between">
-          <Typography variant="h1">
+          <h1 className="text-3xl font-semibold tracking-tight">
             Dashboard
-          </Typography>
+          </h1>
         </div>
 
-        {/* HERO CARD */}
-
-        
-
-            <img
-              src="/images/team.png"
-              alt="Team Illustration"
-              className="w-350 h-65"
-            />
-
-          
+        {/* HERO IMAGE */}
+        <img
+  src="/images/team.png"
+  alt="Team Illustration"
+  className="w-full h-75 object-cover rounded-2xl"
+/>
 
         {/* STAT CARDS */}
-
-        <div className="grid md:grid-cols-4 gap-6">
-
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
             title="Website Views"
             value="4,254"
@@ -103,146 +101,137 @@ export default function Dashboard() {
             description="+8% this month"
             icon={<ClipboardList size={20} />}
           />
-
         </div>
 
         {/* PROJECTS */}
-
         <Card className="rounded-2xl shadow-sm">
-
           <CardHeader>
-            <CardTitle>
-              <Typography variant="h3">
-                Projects
-              </Typography>
-            </CardTitle>
+            <CardTitle>Projects</CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-6">
-
             {[
               { name: "Material UI Version", budget: "$14,000", progress: 60 },
               { name: "Add Progress Track", budget: "$3,000", progress: 30 },
               { name: "Fix Platform Errors", budget: "$800", progress: 80 },
               { name: "Launch Mobile App", budget: "$5,000", progress: 50 },
             ].map((project, index) => (
-
               <div key={index} className="space-y-2">
-
-                <div className="flex justify-between">
-
-                  <Typography variant="p">
-                    {project.name}
-                  </Typography>
-
-                  <Typography
-                    variant="p"
-                    className="text-muted-foreground"
-                  >
+                <div className="flex justify-between text-sm">
+                  <p>{project.name}</p>
+                  <p className="text-muted-foreground">
                     {project.budget}
-                  </Typography>
-
+                  </p>
                 </div>
 
                 <Progress value={project.progress} />
-
               </div>
-
             ))}
-
           </CardContent>
         </Card>
 
-        {/* CHARTS */}
+        {/* MAIN CHART (NEW AREA CHART) */}
+        <AreaChartCard />
 
-        <div className="grid md:grid-cols-2 gap-6">
+        {/* OTHER CHARTS */}
+        <div className="grid gap-6 lg:grid-cols-2">
 
           {/* SALES OVERVIEW */}
-
           <Card className="rounded-2xl shadow-sm">
-
             <CardHeader>
-              <CardTitle>
-                <Typography variant="h3">
-                  Sales Overview
-                </Typography>
-              </CardTitle>
+              <CardTitle>Sales Overview</CardTitle>
             </CardHeader>
 
             <CardContent>
-
-              <ResponsiveContainer width="100%" height={280}>
-
+              <ChartContainer
+                config={{
+                  value: {
+                    label: "Sales",
+                    color: "hsl(var(--chart-1))",
+                  },
+                }}
+                className="h-75"
+              >
                 <LineChart data={lineData}>
+                  <CartesianGrid vertical={false} />
 
-                  <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" />
-
-                  <XAxis dataKey="name" stroke="#6b7280" />
-
-                  <Tooltip />
-
-                  <Line
-                    type="monotone"
-                    dataKey="value"
-                    stroke="#22c55e"
-                    strokeWidth={3}
-                    dot={{ r: 4 }}
+                  <XAxis
+                    dataKey="name"
+                    tickLine={false}
+                    axisLine={false}
                   />
 
+                  <ChartTooltip content={<ChartTooltipContent />} />
+
+                 <Line
+                  type="monotone"
+                  dataKey="value"
+                  stroke="#3b82f6"
+                  strokeWidth={3}
+                  fill="#3b82f6"
+                  fillOpacity={0.1}
+                  dot={{
+                   r: 4,
+                  stroke: "#3b82f6",
+                  strokeWidth: 2,
+                  fill: "white",
+                   }}
+                   />
                 </LineChart>
-
-              </ResponsiveContainer>
-
+              </ChartContainer>
             </CardContent>
-
           </Card>
 
           {/* QUARTERLY PERFORMANCE */}
-
           <Card className="rounded-2xl shadow-sm">
-
             <CardHeader>
-              <CardTitle>
-                <Typography variant="h3">
-                  Quarterly Performance
-                </Typography>
-              </CardTitle>
+              <CardTitle>Quarterly Performance</CardTitle>
             </CardHeader>
 
             <CardContent>
-
-              <ResponsiveContainer width="100%" height={280}>
-
+              <ChartContainer
+                config={{
+                  income: {
+                    label: "Income",
+                    color: "hsl(var(--chart-2))",
+                  },
+                  expense: {
+                    label: "Expense",
+                    color: "#3b82f6",
+                  },
+                }}
+                className="h-75"
+              >
                 <BarChart data={performanceData}>
+                  <CartesianGrid vertical={false} />
 
-                  <XAxis dataKey="name" stroke="#6b7280" />
+                  <XAxis
+                    dataKey="name"
+                    tickLine={false}
+                    axisLine={false}
+                  />
 
-                  <Tooltip />
+                  <ChartTooltip content={<ChartTooltipContent />} />
 
                   <Bar
                     dataKey="income"
-                    fill="#22c55e"
+                    fill="var(--color-income)"
                     radius={[6, 6, 0, 0]}
                   />
 
                   <Bar
                     dataKey="expense"
-                    fill="#111827"
+                    fill="var(--color-expense)"
                     radius={[6, 6, 0, 0]}
                   />
-
                 </BarChart>
-
-              </ResponsiveContainer>
-
+              </ChartContainer>
             </CardContent>
-
           </Card>
 
         </div>
 
       </main>
-
     </div>
   )
 }

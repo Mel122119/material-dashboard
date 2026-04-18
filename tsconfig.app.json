@@ -1,32 +1,42 @@
 {
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "target": "ES2022",
-    "useDefineForClassFields": true,
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "types": ["vite/client"],
-    "skipLibCheck": true,
 
-    /* Bundler mode */
+    /* Language + Environment */
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "useDefineForClassFields": true,
+
+    /* Modules */
+    "module": "ESNext",
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
     "moduleDetection": "force",
-    "noEmit": true,
+
+    /* JSX */
     "jsx": "react-jsx",
 
-    /* Linting */
+    /* Vite */
+    "types": ["vite/client"],
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+
+    /* Paths (modern way) */
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
+    /* Strictness */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+
+    /* Performance */
+    "skipLibCheck": true,
+
+    /* TEMP: silence baseUrl warning */
+    "ignoreDeprecations": "6.0"
   },
   "include": ["src"]
 }

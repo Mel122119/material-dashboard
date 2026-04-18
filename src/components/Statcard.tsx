@@ -1,11 +1,12 @@
-import {
-  LineChart,
-  Line,
-  ResponsiveContainer,
-} from "recharts"
-
 import { Card, CardContent } from "@/components/ui/card"
-import { Typography } from "@/components/ui/typography"
+
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
+
+import { LineChart, Line } from "recharts"
 
 interface StatCardProps {
   title: string
@@ -31,12 +32,9 @@ export function StatCard({ title, value, description, icon }: StatCardProps) {
         {/* Header */}
         <div className="flex items-center justify-between">
 
-          <Typography
-            variant="p"
-            className="text-sm text-muted-foreground"
-          >
+          <p className="text-sm text-muted-foreground">
             {title}
-          </Typography>
+          </p>
 
           {icon && (
             <div className="p-2 rounded-lg bg-muted flex items-center justify-center">
@@ -47,35 +45,39 @@ export function StatCard({ title, value, description, icon }: StatCardProps) {
         </div>
 
         {/* Value */}
-        <Typography
-          variant="h2"
-          className="text-3xl font-bold"
-        >
+        <h2 className="text-2xl font-bold">
           {value}
-        </Typography>
+        </h2>
 
         {/* Mini Chart */}
-        <div className="h-16">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={miniData}>
-              <Line
-                type="monotone"
-                dataKey="value"
-                stroke="#7c3aed"
-                strokeWidth={2}
-                dot={false}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
+        <ChartContainer
+          config={{
+            value: {
+              label: "Value",
+              color: "hsl(var(--chart-1))",
+            },
+          }}
+          className="h-16 w-full"
+        >
+          <LineChart data={miniData}>
+
+            <ChartTooltip content={<ChartTooltipContent />} />
+
+            <Line
+              type="monotone"
+              dataKey="value"
+              stroke="var(--color-value)"
+              strokeWidth={2}
+              dot={false}
+            />
+
+          </LineChart>
+        </ChartContainer>
 
         {/* Description */}
-        <Typography
-          variant="p"
-          className="text-sm text-muted-foreground"
-        >
+        <p className="text-sm text-muted-foreground">
           {description}
-        </Typography>
+        </p>
 
       </CardContent>
     </Card>

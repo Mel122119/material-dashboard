@@ -43,7 +43,7 @@ const notifications = [
 
 export default function Notifications() {
   return (
-    <div className="space-y-8">
+    <div className="w-full space-y-8">
 
       {/* Page Title */}
       <div>
@@ -56,7 +56,7 @@ export default function Notifications() {
       </div>
 
       {/* Recent Notifications */}
-      <Card className="border border-border shadow-sm">
+      <Card className="border border-border shadow-sm bg-white dark:bg-gray-900">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Recent Notifications</CardTitle>
           <Button variant="outline" size="sm">
@@ -96,7 +96,7 @@ export default function Notifications() {
       </Card>
 
       {/* Settings */}
-      <Card className="border border-border shadow-sm">
+     <Card className="border border-border shadow-sm bg-white dark:bg-gray-900">
         <CardHeader>
           <CardTitle>Notifications Settings</CardTitle>
         </CardHeader>
