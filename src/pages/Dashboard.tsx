@@ -1,6 +1,7 @@
 "use client"
 
-import { StatCard } from "@/components/Statcard"
+import MiniChartCard from "@/components/charts/MiniChartCard"
+import AreaChartCard from "@/components/charts/AreaChartCard"
 
 import {
   Card,
@@ -8,8 +9,6 @@ import {
   CardTitle,
   CardContent,
 } from "@/components/ui/card"
-
-import { Progress } from "@/components/ui/progress"
 
 import {
   ChartContainer,
@@ -24,18 +23,20 @@ import {
   Bar,
   XAxis,
   CartesianGrid,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
 } from "recharts"
 
-import {
-  Eye,
-  ShoppingCart,
-  CheckCircle,
-  ClipboardList,
-} from "lucide-react"
+/* ---------------- DATA ---------------- */
 
-import AreaChartCard from "@/components/charts/AreaChartCard"
-
-/* ---------------- Chart Data ---------------- */
+const miniStats = [
+  { title: "Website Views", value: "4,254", change: "+15%", data: [40,60,30,80,50,70] },
+  { title: "Daily Sales", value: "9,109", change: "+12%", data: [20,40,60,30,70,50] },
+  { title: "Completed Tasks", value: "8,530", change: "+8%", data: [90,50,40,60,30,70] },
+  { title: "Orders", value: "9,881", change: "+5%", data: [30,70,50,40,60,20] },
+]
 
 const lineData = [
   { name: "Jan", value: 400 },
@@ -46,186 +47,178 @@ const lineData = [
   { name: "Jun", value: 750 },
 ]
 
-const performanceData = [
-  { name: "Q1", income: 4000, expense: 2400 },
-  { name: "Q2", income: 3000, expense: 1398 },
-  { name: "Q3", income: 5000, expense: 2800 },
-  { name: "Q4", income: 4780, expense: 3908 },
+const pieData = [
+  { name: "Direct", value: 40 },
+  { name: "Social", value: 30 },
+  { name: "Referral", value: 30 },
 ]
+
+const COLORS = ["#22c55e", "#3b82f6", "#111827"]
+
+/* ---------------- COMPONENT ---------------- */
 
 export default function Dashboard() {
   return (
-    <div className="min-h-screen bg-muted/40">
-      <main className="w-full max-w-7xl mx-auto p-6 space-y-8">
+    <div className="bg-muted/40 min-h-screen">
+      <main className="max-w-300 mx-auto p-6 space-y-6">
 
-        {/* HEADER */}
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-semibold tracking-tight">
-            Dashboard
-          </h1>
-        </div>
+        {/* HERO */}
+        <div className="rounded-xl bg-black text-white px-6 py-5 flex justify-between items-center">
+          <div className="space-y-2 max-w-md">
+          </div>
 
-        {/* HERO IMAGE */}
-        <img
+         <img
   src="/images/team.png"
-  alt="Team Illustration"
-  className="w-full h-75 object-cover rounded-2xl"
+  alt="Team"
+  className="h-full w-auto object-contain"
 />
-
-        {/* STAT CARDS */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard
-            title="Website Views"
-            value="4,254"
-            description="+15% from last week"
-            icon={<Eye size={20} />}
-          />
-
-          <StatCard
-            title="Daily Sales"
-            value="9,109"
-            description="+12% today"
-            icon={<ShoppingCart size={20} />}
-          />
-
-          <StatCard
-            title="Completed Tasks"
-            value="8,530"
-            description="Last campaign performance"
-            icon={<CheckCircle size={20} />}
-          />
-
-          <StatCard
-            title="Orders"
-            value="9,881"
-            description="+8% this month"
-            icon={<ClipboardList size={20} />}
-          />
         </div>
 
-        {/* PROJECTS */}
-        <Card className="rounded-2xl shadow-sm">
-          <CardHeader>
-            <CardTitle>Projects</CardTitle>
+        {/* MINI CARDS */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {miniStats.map((item, i) => (
+            <MiniChartCard key={i} {...item} />
+          ))}
+        </div>
+
+        {/* PROJECT TABLE */}
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">
+              Projects
+            </CardTitle>
           </CardHeader>
 
-          <CardContent className="space-y-6">
+          <CardContent>
+
+            {/* HEADERS */}
+            <div className="grid grid-cols-5 text-xs text-muted-foreground pb-2 border-b">
+              <span>Company</span>
+              <span>Members</span>
+              <span>Budget</span>
+              <span>Status</span>
+              <span>Completion</span>
+            </div>
+
+            {/* ROWS */}
             {[
-              { name: "Material UI Version", budget: "$14,000", progress: 60 },
-              { name: "Add Progress Track", budget: "$3,000", progress: 30 },
-              { name: "Fix Platform Errors", budget: "$800", progress: 80 },
-              { name: "Launch Mobile App", budget: "$5,000", progress: 50 },
-            ].map((project, index) => (
-              <div key={index} className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <p>{project.name}</p>
-                  <p className="text-muted-foreground">
-                    {project.budget}
-                  </p>
+              "Material UI Version",
+              "Add Progress Track",
+              "Fix Platform Errors",
+              "Launch Mobile App",
+              "Add Pricing Page",
+            ].map((name, i) => (
+              <div
+                key={i}
+                className="grid grid-cols-5 items-center py-3 border-b last:border-none"
+              >
+                <span className="text-sm">{name}</span>
+
+                <div className="flex -space-x-2">
+                  {[1,2,3,4].map((_, i) => (
+                    <div
+                      key={i}
+                      className="w-6 h-6 rounded-full bg-gray-300 border-2 border-white"
+                    />
+                  ))}
                 </div>
 
-                <Progress value={project.progress} />
+                <span className="text-xs text-muted-foreground">
+                  $4,000
+                </span>
+
+                <span className="text-xs">Working</span>
+
+                <div className="w-24 h-2 bg-gray-200 rounded-full">
+                  <div className="h-full bg-black w-[60%] rounded-full" />
+                </div>
               </div>
             ))}
           </CardContent>
         </Card>
 
-        {/* MAIN CHART (NEW AREA CHART) */}
-        <AreaChartCard />
+        {/* CHARTS */}
+        <div className="grid gap-4 md:grid-cols-2">
 
-        {/* OTHER CHARTS */}
-        <div className="grid gap-6 lg:grid-cols-2">
+          {/* AREA */}
+          <AreaChartCard />
 
-          {/* SALES OVERVIEW */}
-          <Card className="rounded-2xl shadow-sm">
-            <CardHeader>
-              <CardTitle>Sales Overview</CardTitle>
+          {/* LINE */}
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">
+                User Activity
+              </CardTitle>
             </CardHeader>
 
-            <CardContent>
+            <CardContent className="h-64">
               <ChartContainer
                 config={{
-                  value: {
-                    label: "Sales",
-                    color: "hsl(var(--chart-1))",
-                  },
+                  value: { label: "Users", color: "#22c55e" },
                 }}
-                className="h-75"
+                className="h-full"
               >
-                <LineChart data={lineData}>
-                  <CartesianGrid vertical={false} />
+                <ResponsiveContainer>
+                  <LineChart data={lineData}>
+                    <CartesianGrid vertical={false} />
+                    <XAxis dataKey="name" />
 
-                  <XAxis
-                    dataKey="name"
-                    tickLine={false}
-                    axisLine={false}
-                  />
+                    <ChartTooltip content={<ChartTooltipContent />} />
 
-                  <ChartTooltip content={<ChartTooltipContent />} />
-
-                 <Line
-                  type="monotone"
-                  dataKey="value"
-                  stroke="#3b82f6"
-                  strokeWidth={3}
-                  fill="#3b82f6"
-                  fillOpacity={0.1}
-                  dot={{
-                   r: 4,
-                  stroke: "#3b82f6",
-                  strokeWidth: 2,
-                  fill: "white",
-                   }}
-                   />
-                </LineChart>
+                    <Line
+                      type="monotone"
+                      dataKey="value"
+                      stroke="#22c55e"
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
               </ChartContainer>
             </CardContent>
           </Card>
 
-          {/* QUARTERLY PERFORMANCE */}
-          <Card className="rounded-2xl shadow-sm">
-            <CardHeader>
-              <CardTitle>Quarterly Performance</CardTitle>
+          {/* PIE */}
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">
+                Traffic Sources
+              </CardTitle>
             </CardHeader>
 
-            <CardContent>
-              <ChartContainer
-                config={{
-                  income: {
-                    label: "Income",
-                    color: "hsl(var(--chart-2))",
-                  },
-                  expense: {
-                    label: "Expense",
-                    color: "#3b82f6",
-                  },
-                }}
-                className="h-75"
-              >
-                <BarChart data={performanceData}>
-                  <CartesianGrid vertical={false} />
+            <CardContent className="h-64 flex items-center justify-center">
+              <ResponsiveContainer width={200} height={200}>
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    innerRadius={60}
+                    outerRadius={80}
+                    dataKey="value"
+                  >
+                    {pieData.map((_, i) => (
+                      <Cell key={i} fill={COLORS[i]} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
 
-                  <XAxis
-                    dataKey="name"
-                    tickLine={false}
-                    axisLine={false}
-                  />
+          {/* BAR */}
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">
+                Quarterly Performance
+              </CardTitle>
+            </CardHeader>
 
-                  <ChartTooltip content={<ChartTooltipContent />} />
-
-                  <Bar
-                    dataKey="income"
-                    fill="var(--color-income)"
-                    radius={[6, 6, 0, 0]}
-                  />
-
-                  <Bar
-                    dataKey="expense"
-                    fill="var(--color-expense)"
-                    radius={[6, 6, 0, 0]}
-                  />
+            <CardContent className="h-64">
+              <ResponsiveContainer>
+                <BarChart data={lineData}>
+                  <XAxis dataKey="name" />
+                  <Bar dataKey="value" fill="#22c55e" />
                 </BarChart>
-              </ChartContainer>
+              </ResponsiveContainer>
             </CardContent>
           </Card>
 
