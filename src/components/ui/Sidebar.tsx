@@ -11,167 +11,79 @@ import {
   BookOpen,
   LogIn,
   UserPlus,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react"
 
-/* ================= TYPES ================= */
-
-type Props = {
-  children: React.ReactNode
-}
-
-/* ================= PROVIDER ================= */
-
-export function SidebarProvider({ children }: Props) {
-  return <div className="flex w-full min-h-screen">{children}</div>
-}
-
-/* ================= BASE ================= */
-
-function Sidebar({ children }: Props) {
-  return (
-    <aside className="w-56 bg-[#f8f9fa] border-r h-screen flex flex-col px-3 py-4">
-      {children}
-    </aside>
-  )
-}
-
-/* 🔥 FIXED HERE */
-function SidebarContent({ children }: Props) {
-  return (
-    <div className="flex flex-col gap-6">
-      {children}
-    </div>
-  )
-}
-
-/* ================= MENU ================= */
-
-function SidebarMenu({ children }: Props) {
-  return <ul className="space-y-1">{children}</ul>
-}
-
-function SidebarMenuItem({ children }: Props) {
-  return <li>{children}</li>
-}
-
-function SidebarMenuButton({
-  children,
-  to,
-}: {
-  children: React.ReactNode
-  to: string
-}) {
-  const location = useLocation()
-  const isActive = location.pathname === to
-
-  return (
-    <Link
-      to={to}
-      className={`flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm transition-all
-        ${
-          isActive
-            ? "bg-black text-white"
-            : "text-gray-700 hover:bg-gray-200"
-        }`}
-    >
-      {children}
-    </Link>
-  )
-}
-
-/* ================= SIDEBAR ================= */
-
 export function AppSidebar() {
-  return (
-    <Sidebar>
-      <SidebarContent>
+  const location = useLocation()
+  const [collapsed, setCollapsed] = React.useState(false)
 
-        {/* TOP SECTION */}
-        <div>
-          {/* LOGO */}
-          <h1 className="text-sm font-semibold px-2 mb-4">
+  const menu = [
+    { name: "Dashboard", icon: LayoutDashboard, path: "/" },
+    { name: "Profile", icon: User, path: "/profile" },
+    { name: "Tables", icon: Table, path: "/tables" },
+    { name: "Notifications", icon: Bell, path: "/notifications" },
+    { name: "Subscriptions", icon: CreditCard, path: "/subscriptions" },
+    { name: "Documentation", icon: BookOpen, path: "/documentation" },
+    { name: "Sign In", icon: LogIn, path: "/signin" },
+    { name: "Sign Up", icon: UserPlus, path: "/signup" },
+  ]
+
+  return (
+    <aside
+      className="
+        w-56 
+        h-screen 
+        flex flex-col 
+        px-3 py-4
+        bg-white dark:bg-gray-900
+        border-r border-gray-200 dark:border-gray-800
+        transition-colors
+      "
+    >
+
+      {/* TOP */}
+      <div className="flex items-center justify-between px-3 py-4">
+        {!collapsed && (
+          <h1 className="text-sm font-semibold">
             Material Shadow
           </h1>
+        )}
 
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton to="/">
-                <LayoutDashboard size={18} />
-                Dashboard
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="p-1 rounded hover:bg-gray-200"
+        >
+          {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+        </button>
+      </div>
 
-            <SidebarMenuItem>
-              <SidebarMenuButton to="/profile">
-                <User size={18} />
-                Profile
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+      {/* MENU */}
+      <nav className="flex-1 px-2 space-y-1">
+        {menu.map((item) => {
+          const Icon = item.icon
+          const active = location.pathname === item.path
 
-            <SidebarMenuItem>
-              <SidebarMenuButton to="/tables">
-                <Table size={18} />
-                Tables
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+          return (
+            <Link
+              key={item.name}
+              to={item.path}
+              className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition
+                ${
+                  active
+                    ? "bg-black text-white"
+                    : "text-gray-700 hover:bg-gray-200"
+                }`}
+            >
+              <Icon size={18} />
 
-            <SidebarMenuItem>
-              <SidebarMenuButton to="/notifications">
-                <Bell size={18} />
-                Notifications
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+              {!collapsed && <span>{item.name}</span>}
+            </Link>
+          )
+        })}
+      </nav>
 
-            <SidebarMenuItem>
-              <SidebarMenuButton to="/subscriptions">
-                <CreditCard size={18} />
-                Subscriptions
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-
-            <SidebarMenuItem>
-              <SidebarMenuButton to="/documentation">
-                <BookOpen size={18} />
-                Documentation
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </div>
-
-        {/* AUTH SECTION (NOW MOVED UP) */}
-        <div>
-          <p className="text-[10px] text-gray-400 px-2 mb-2">
-            AUTH
-          </p>
-
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton to="/signin">
-                <LogIn size={18} />
-                Sign In
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-
-            <SidebarMenuItem>
-              <SidebarMenuButton to="/signup">
-                <UserPlus size={18} />
-                Sign Up
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </div>
-
-      </SidebarContent>
-    </Sidebar>
+    </aside>
   )
-}
-
-/* ================= EXPORTS ================= */
-
-export {
-  Sidebar,
-  SidebarContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
 }

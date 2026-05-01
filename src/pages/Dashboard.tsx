@@ -67,11 +67,7 @@ export default function Dashboard() {
           <div className="space-y-2 max-w-md">
           </div>
 
-         <img
-  src="/images/team.png"
-  alt="Team"
-  className="h-full w-auto object-contain"
-/>
+          <img src="/images/team.png" className="h-full w-full" />
         </div>
 
         {/* MINI CARDS */}
